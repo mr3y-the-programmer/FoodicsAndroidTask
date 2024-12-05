@@ -196,57 +196,68 @@ private fun CategoriesTabRow(
 
 @Composable
 private fun ProductsList(
-    products: List<Product>,
+    products: List<Product>?,
     onProductClick: (Product) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (products.isEmpty()) {
-        Box(
-            modifier = modifier,
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text ="No products found, Refine your search & try again",
-                textAlign = TextAlign.Center
-            )
-        }
-    } else {
-        Box(
-            modifier = modifier
-                .graphicsLayer {
-                    compositingStrategy = CompositingStrategy.Offscreen
-                }
-                .drawWithContent {
-                    drawContent()
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            0.1f to Color.Black,
-                            0.3f to Color.Black,
-                            0.6f to Color.Black,
-                            0.8f to Color.Black,
-                            0.999f to Color.Transparent
-                        ),
-                        blendMode = BlendMode.DstIn
-                    )
-                }
-        ) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(128.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.background(MaterialTheme.colorScheme.background)
+    when {
+        products == null -> {
+            Box(
+                modifier = modifier.background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center
             ) {
-                items(products, key = { it.id }) {
-                    Product(
-                        product = it,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .clickable(
-                                onClick = { onProductClick(it) }
-                            )
-                    )
+                CircularProgressIndicator()
+            }
+        }
+        products.isEmpty() -> {
+            Box(
+                modifier = modifier.background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No products found, Refine your search & try again",
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+        else -> {
+            Box(
+                modifier = modifier
+                    .graphicsLayer {
+                        compositingStrategy = CompositingStrategy.Offscreen
+                    }
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                0.1f to Color.Black,
+                                0.3f to Color.Black,
+                                0.6f to Color.Black,
+                                0.8f to Color.Black,
+                                0.999f to Color.Transparent
+                            ),
+                            blendMode = BlendMode.DstIn
+                        )
+                    }
+            ) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(128.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                ) {
+                    items(products, key = { it.id }) {
+                        Product(
+                            product = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .clickable(
+                                    onClick = { onProductClick(it) }
+                                )
+                        )
+                    }
                 }
             }
         }

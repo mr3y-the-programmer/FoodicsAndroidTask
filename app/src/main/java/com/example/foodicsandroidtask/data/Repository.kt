@@ -1,20 +1,19 @@
 package com.example.foodicsandroidtask.data
 
+import com.example.foodicsandroidtask.data.network.ApiClient
 import com.example.foodicsandroidtask.model.Category
 import com.example.foodicsandroidtask.model.Product
-import com.example.foodicsandroidtask.model.SampleCategories
-import com.example.foodicsandroidtask.model.SampleProducts
 
-class Repository {
+class Repository(
+    private val apiClient: ApiClient
+) {
 
-    private val allProducts = SampleProducts
-
-    fun getAllCategories(): List<Category> {
-        return SampleCategories
+    suspend fun getAllCategories(): List<Category> {
+        return apiClient.getCategories()
     }
 
-    fun getProductsBy(categoryId: String, prefix: String? = null): List<Product> {
-        return allProducts
+    suspend fun getProductsBy(categoryId: String, prefix: String? = null): List<Product> {
+        return apiClient.getProductsByCategory(categoryId)
             .run {
                 if (!prefix.isNullOrBlank()) {
                     filter { it.name.startsWith(prefix, ignoreCase = true) }
