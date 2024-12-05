@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -105,13 +106,19 @@ fun TablesScreen(
                 onSearchTextChange = onSearchTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(bottom = 8.dp)
+                    .widthIn(max = 464.dp)
                     .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
             )
             CategoriesTabRow(
                 allCategories = state.allCategories,
                 selectedCategoryIndex = state.selectedCategoryIndex,
                 onSelectedCategoryIndexChange = onSelectedCategoryChange,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .widthIn(max = 464.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
             )
             ProductsList(
                 products = state.allProducts,
@@ -125,7 +132,9 @@ fun TablesScreen(
                 onClick = onViewOrderClick,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .widthIn(max = 464.dp)
                     .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
                     .height(48.dp)
             )
         }
@@ -370,7 +379,8 @@ private fun OrderView(
     }
 }
 
-@Preview
+@Preview(device = "spec:id=reference_phone,shape=Normal,width=411,height=891,unit=dp,dpi=420")
+@Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
 @Composable
 fun TablesScreenPreview() {
     FoodicsAndroidTaskTheme {
