@@ -78,6 +78,8 @@ dependencies {
     testImplementation(libs.room.testing)
     testImplementation(libs.coil.test)
     testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.turbine)
+    testImplementation(libs.assertk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
