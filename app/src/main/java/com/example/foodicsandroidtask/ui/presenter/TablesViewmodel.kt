@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class TablesViewmodel(
@@ -25,14 +26,16 @@ class TablesViewmodel(
     val state = _state.asStateFlow()
 
     init {
-        val allCategories = repository.getAllCategories()
-        val selectedCategory = allCategories[_state.value.selectedCategoryIndex]
-        val products = repository.getProductsBy(categoryId = selectedCategory.id)
-        _state.update {
-            it.copy(
-                allCategories = allCategories,
-                allProducts = products
-            )
+        viewModelScope.launch {
+            val allCategories = repository.getAllCategories()
+            val selectedCategory = allCategories[_state.value.selectedCategoryIndex]
+            val products = repository.getProductsBy(categoryId = selectedCategory.id)
+            _state.update {
+                it.copy(
+                    allCategories = allCategories,
+                    allProducts = products
+                )
+            }
         }
 
         snapshotFlow { _searchQuery.value }
