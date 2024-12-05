@@ -6,6 +6,7 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import com.example.foodicsandroidtask.data.Repository
+import com.example.foodicsandroidtask.data.local.InMemoryDao
 import com.example.foodicsandroidtask.data.network.ApiClient
 import com.example.foodicsandroidtask.data.network.FakeHttpClient
 import com.example.foodicsandroidtask.model.SampleCategories
@@ -22,7 +23,7 @@ class TablesViewmodelTest {
     val mainDispatcherRule = MainDispatcherRule(StandardTestDispatcher())
 
     private val httpClient = FakeHttpClient.getInstance()
-    private val repository = Repository(ApiClient(httpClient = httpClient))
+    private val repository = Repository(ApiClient(httpClient = httpClient), InMemoryDao())
     private lateinit var viewModel: TablesViewmodel
 
     @Test

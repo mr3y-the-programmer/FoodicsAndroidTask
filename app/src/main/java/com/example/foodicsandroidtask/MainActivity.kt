@@ -13,6 +13,7 @@ import coil3.request.crossfade
 import com.example.foodicsandroidtask.di.appModule
 import com.example.foodicsandroidtask.ui.screens.HomeScreen
 import com.example.foodicsandroidtask.ui.theme.FoodicsAndroidTaskTheme
+import org.koin.android.ext.koin.androidContext
 import org.koin.compose.KoinApplication
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
                 }
                 KoinApplication(
                     application = {
+                        androidContext(this@MainActivity)
                         modules(appModule)
                     }
                 ) {
