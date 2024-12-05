@@ -18,18 +18,16 @@ import org.koin.dsl.module
 
 val appModule = module {
     single {
-        ApiClient(
-            httpClient = HttpClient(OkHttp) {
-                install(ContentNegotiation) {
-                    json(
-                        Json {
-                            ignoreUnknownKeys = true
-                            isLenient = true
-                        }
-                    )
-                }
+        HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    }
+                )
             }
-        )
+        }
     }
 
     single {
@@ -43,6 +41,8 @@ val appModule = module {
     single<ProductCategoriesDAO> {
         get<AppDatabase>().productCategoriesDao()
     }
+
+    singleOf(::ApiClient)
 
     singleOf(::Repository)
 

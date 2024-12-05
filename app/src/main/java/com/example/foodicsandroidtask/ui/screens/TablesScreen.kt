@@ -338,7 +338,7 @@ private fun OrderView(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val prodsWithQuantity = remember(orderProducts) { orderProducts.groupBy { it.name }.mapValues { it.value.size }.toList() }
+    val prodNamesWithQuantity = remember(orderProducts) { orderProducts.groupBy { it.name }.mapValues { it.value.size }.toList() }
     val totalPrice = remember(orderProducts) { orderProducts.sumOf { it.price } }
     Button(
         onClick = onClick,
@@ -370,11 +370,11 @@ private fun OrderView(
                         .padding(horizontal = 8.dp)
                         .weight(1f),
                 ) {
-                    items(prodsWithQuantity, key = { (name, _) -> name }) { (name, quantity) ->
+                    items(prodNamesWithQuantity, key = { (name, _) -> name }) { (name, quantity) ->
                         Text("${quantity}x $name", color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
                     }
                 }
-                if (totalPrice != 0.0 && orderProducts.isNotEmpty()) {
+                if (orderProducts.isNotEmpty()) {
                     Text(text = "SAR $totalPrice")
                 }
                 Icon(
