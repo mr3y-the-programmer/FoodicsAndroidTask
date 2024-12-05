@@ -5,13 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.request.crossfade
+import com.example.foodicsandroidtask.di.appModule
+import com.example.foodicsandroidtask.ui.screens.HomeScreen
 import com.example.foodicsandroidtask.ui.theme.FoodicsAndroidTaskTheme
+import org.koin.compose.KoinApplication
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,10 +21,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FoodicsAndroidTaskTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                // Setup coil image loader for loading images from network.
+                setSingletonImageLoaderFactory { context ->
+                    createAsyncImageLoader(context)
+                }
+                KoinApplication(
+                    application = {
+                        modules(appModule)
+                    }
+                ) {
+                    HomeScreen(
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }
@@ -30,18 +39,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FoodicsAndroidTaskTheme {
-        Greeting("Android")
-    }
+private fun createAsyncImageLoader(context: PlatformContext): ImageLoader {
+    return ImageLoader.Builder(context)
+        .crossfade(true)
+        .build()
 }
