@@ -1,5 +1,6 @@
 package com.example.foodicsandroidtask.ui.screens
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -230,6 +232,11 @@ private fun ProductsList(
             }
         }
         else -> {
+            val state = rememberLazyGridState()
+            val gradientEndColor by animateColorAsState(
+                targetValue = if (state.canScrollForward) Color.Transparent else Color.Black,
+                label = "gradientEndColorAnimation"
+            )
             Box(
                 modifier = modifier
                     .graphicsLayer {
@@ -243,13 +250,14 @@ private fun ProductsList(
                                 0.3f to Color.Black,
                                 0.6f to Color.Black,
                                 0.8f to Color.Black,
-                                0.999f to Color.Transparent
+                                0.999f to gradientEndColor
                             ),
                             blendMode = BlendMode.DstIn
                         )
                     }
             ) {
                 LazyVerticalGrid(
+                    state = state,
                     columns = GridCells.Adaptive(128.dp),
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
