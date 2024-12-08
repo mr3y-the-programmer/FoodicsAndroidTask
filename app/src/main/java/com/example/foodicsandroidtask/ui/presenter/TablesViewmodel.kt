@@ -28,6 +28,8 @@ class TablesViewmodel(
     init {
         viewModelScope.launch {
             val allCategories = repository.getAllCategories()
+            if (allCategories.isEmpty()) return@launch
+
             val selectedCategory = allCategories[_state.value.selectedCategoryIndex]
             val products = repository.getProductsBy(categoryId = selectedCategory.id)
             _state.update {
@@ -42,7 +44,10 @@ class TablesViewmodel(
             .dropWhile { it.isBlank() } // drop initial empty or blank values
             .debounce(250) // avoid redundant intermediate requests when user is typing so fast.
             .onEach { searchQuery ->
-                val categoryId = _state.value.allCategories[_state.value.selectedCategoryIndex].id
+                val categories = _state.value.allCategories
+                if (categories.isEmpty()) return@onEach
+
+                val categoryId = categories[_state.value.selectedCategoryIndex].id
                 val searchResult = repository.getProductsBy(categoryId = categoryId, prefix = searchQuery)
                 _state.update { state -> state.copy(allProducts = searchResult) }
             }
