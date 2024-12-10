@@ -19,6 +19,7 @@ class Repository(
             dao.insertCategories(categories.map { it.toEntity() })
             return categories
         } else {
+            // fallback to fetching data from local database when mock api call fails
             return dao.getAllCategories().map { it.toCategory() }
         }
     }
@@ -35,6 +36,7 @@ class Repository(
             }
 
         } else {
+            // fallback to fetching data from local database when mock api call fails
             return if (!prefix.isNullOrBlank()) {
                 dao.getProductsByName(prefix).map { it.toProduct() }
             } else {
